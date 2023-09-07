@@ -1,0 +1,60 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img alt="" src="{% static 'img/icono.png' %}" width="30" height="30" className="d-inline-block align-top"/>
+            Bienvenidos a -Gestión de Tareas-
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle
+                navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <!-- ms-auto esta dejando al medio los links  -->
+            <ul class="navbar-nav ms-auto  mb-2 mb-lg-0  ">
+                <li class="nav-item">
+                    <a class="nav-link active " aria-current="page" href="{% url 'index' %}">Inicio</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}"> Resumen Tareas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listaTareas' %}"> Lista de Tareas</a>
+                    </li>
+                {% endif %}
+                
+               
+
+            </ul>
+            
+            
+            <div class="ms-auto">
+                {% if user.is_authenticated %}
+                    <a
+                    class="btn btn-outline-light btn-floating m-1"
+                    class="text-white"
+                    role="button"
+                    href="{% url 'logout' %}" 
+                    >Cerrar Sesión
+                    </a>
+                    
+                {% else %}
+                
+                    <a
+                    class="btn btn-outline-light btn-floating m-1"
+                    class="text-white"
+                    role="button"
+                    href="{% url 'login' %}"
+                    >Login</a>
+                {% endif %}
+                
+            </div>
+        </div>
+
+        
+    </div>
+</nav>

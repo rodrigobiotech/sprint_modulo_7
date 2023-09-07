@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container text-center" >
+    <h2 class="text-center my-4">Resumen Tareas</h2>
+    <a
+        class="btn btn-dark m-1"
+        role="button"
+        href="{% url 'crearTarea' %}"
+        >Agregar Tarea
+    </a>
+    <div class="row justify-content-center">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 border-bottom">Tareas Pendientes</h5>
+                    <div class="card-text">
+                        <p class="contadorTareas"> {{contTareasPendientes}} </p>
+                        <p>{{pendientesVencHoy}} vence hoy</p>
+                        <p>{{pendientesVencidas}} vencidas</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 border-bottom">Tareas en Progreso</h5>
+                    <div class="card-text">
+                        <p class="contadorTareas">{{contTareasEnProgreso}} </p>
+                        <p>{{enProgresoVencHoy}} vence hoy</p>
+                        <p>{{enProgresoVencidas}} vencidas</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+     
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 border-bottom">Tareas Realizadas</h5>
+                    <div class="card-text">
+                        <p class="contadorTareas">{{contTareasTerminadas}} </p>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 border-bottom">Tareas Canceladas</h5>
+                    <div class="card-text">
+                        <p class="contadorTareas">{{contTareasCanceladas}} </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+     
+    </div>
+
+    <!-- <div class="chart">
+        <canvas id="barChart"></canvas>
+    </div>
+    
+    <div class="chart">
+        <canvas id="pieChart"></canvas>
+    </div> -->
+
+</div>
+     
+{% endblock %}
+<!-- 
+{% block scripts %}
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %} -->
+
+

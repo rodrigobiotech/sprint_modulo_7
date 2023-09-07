@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+{% block title %}Editar Tarea{% endblock %} 
+{% block content %}
+<div class="container">
+    <h2>Editar Tarea</h2>
+    <form action="" method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</div>
+
+{% endblock %}

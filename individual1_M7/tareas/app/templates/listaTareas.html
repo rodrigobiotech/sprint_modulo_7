@@ -1,0 +1,341 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+{% block title %}Lista de Tareas{% endblock %} 
+{% block content %}
+<div class="container text-center">
+  <div class="row">
+    <div class="col-4">
+      <form action="{% url 'listaTareas' %}" method="POST">
+        {% csrf_token %}
+        <h1> Buscador de Tareas</h1>
+        {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible fade show mt-2" role="alert">
+            {% for campo in form %}
+                {% if campo.errors %}
+                    {{ campo.errors }}
+                {% endif %}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {{ form.as_p }}
+        <div class="d-grid col-md-6 mx-auto">
+            <button type="submit" class="btn btn-secondary mt-4">Buscar Tarea</button>
+        </div>
+    </form>
+    </div>
+    <div class="col-8">
+    <h2 class="text-center my-4">Lista de Tareas</h2>
+    <a
+          class="btn btn-dark m-1"
+          role="button"
+          href="{% url 'crearTarea' %}"
+          >Agregar Tarea
+    </a>
+
+    <div class="container">
+      
+      <div class="accordion " id="accordionExample">
+        <div class="steps">
+          <div class="step-item  ">
+            <button
+              class=" step-button text-center  "
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse1"
+              aria-expanded="true"
+              aria-controls="collapse1"
+            >
+              Tareas Pendientes
+            </button>
+          </div>
+          
+          <div class="step-item ">
+            <button
+              class="step-button text-center collapsed "
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse2"
+              aria-expanded="false"
+              aria-controls="collapse2"
+            >
+              Tareas En Progreso
+            </button>
+          </div>
+
+          <div class="step-item ">
+            <button
+              class="step-button text-center collapsed "
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse3"
+              aria-expanded="false"
+              aria-controls="collapse3"
+            >
+              Tareas Terminadas
+            </button>
+          </div>
+
+          <div class="step-item ">
+            <button
+              class="step-button text-center collapsed "
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse4"
+              aria-expanded="false"
+              aria-controls="collapse4"
+            >
+              Tareas Canceladas
+            </button>
+          </div>
+
+        </div>
+         
+        <div class="card">
+          <div id="heading1"></div>
+           
+          <div
+            id="collapse1"
+            class="collapse show"
+            aria-labelledby="heading1"
+            data-bs-parent="#accordionExample"
+          >
+            <h3>Tareas Pendientes</h3>
+
+            
+            <div class="row justify-content-center" >
+              {% if tareasPendientes  %}
+                {% for pendiente in tareasPendientes %}
+                  <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                      <div class="card-body">
+                          <h5 class="card-title mb-4 border-bottom">{{pendiente.titulo}} </h5>
+                          <div class="card-text">
+
+                              <!-- no funciona corregir  -->
+                              {% if pendiente.fecha_vencimiento < now %}
+                                <p> Tarea Vencida  </p>
+                              {% endif %}
+                              <!-- termian aca  -->
+
+                              <p> Fecha de vencimiento: {{pendiente.fecha_vencimiento}} </p>
+
+                              <p> Etiqueta: {{pendiente.etiqueta}} </p>
+                              <p> Descripción: {{pendiente.descripcion}} </p>
+                              <p> Observación: {{pendiente.observacion}} </p>
+                              <p class="{% if pendiente.prioridad == 'Baja' %}text-success {% elif pendiente.prioridad == 'Media' %}text-danger{% elif pendiente.prioridad == 'Alta' %}text-warning{% elif pendiente.prioridad == 'Crítica' %}text-danger bg-dark {% endif %}"> 
+                                Prioridad: {{pendiente.prioridad}} </p>
+                              <a
+                                class="btn btn-primary m-1"
+                                role="button"
+                                href="{% url 'verTarea' pk=pendiente.id %}">
+                                Ver Tarea
+                              </a>
+
+                              <form action="{% url 'eliminarTarea' pk=pendiente.id %}" method='POST'>
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit">Eliminar Tarea</button>
+                              </form>
+                              
+                              <a
+                                class="btn btn-dark m-1"
+                                role="button"
+                                href="{% url 'editarTarea' pk=pendiente.id %}" 
+                                >Editar Tarea
+                              </a>
+                              
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                {% endfor %}
+              {% endif %}
+            </div>  
+          
+          </div>
+        </div>
+        <div class="card">
+          <div id="heading2"> </div>
+          <div
+            id="collapse2"
+            class="collapse"
+            aria-labelledby="heading2"
+            data-bs-parent="#accordionExample"
+          >
+            <h3>Tareas En Progreso</h3>
+
+            
+            <div class="row justify-content-center" >
+              {% if tareasEnProgreso  %}
+                {% for progreso in tareasEnProgreso %}
+                  <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                      <div class="card-body">
+                          <h5 class="card-title mb-4 border-bottom">{{progreso.titulo}} </h5>
+                          <div class="card-text">
+
+                              <!-- no funciona corregir  -->
+                              {% if progreso.fecha_vencimiento < now %}
+                                <p> Tarea Vencida  </p>
+                              {% endif %}
+                              <!-- termian aca  -->
+
+                              <p> Fecha de vencimiento: {{progreso.fecha_vencimiento}} </p>
+
+                              <p> Etiqueta: {{progreso.etiqueta}} </p>
+                              <p> Descripción: {{progreso.descripcion}} </p>
+                              <p> Observación: {{progreso.observacion}} </p>
+                              <p class="{% if progreso.prioridad == 'Baja' %}text-success {% elif progreso.prioridad == 'Media' %}text-danger{% elif progreso.prioridad == 'Alta' %}text-warning{% elif progreso.prioridad == 'Crítica' %}text-danger bg-dark {% endif %}"> Prioridad: {{progreso.prioridad}} </p>
+                              <a
+                                class="btn btn-primary m-1"
+                                role="button"
+                                href="{% url 'verTarea' pk=progreso.id %}">
+                                Ver Tarea
+                              </a>
+                              <form action="{% url 'eliminarTarea' pk=progreso.id %}" method='POST'>
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit">Eliminar Tarea</button>
+                              </form>
+                              <a
+                                class="btn btn-dark m-1"
+                                role="button"
+                                href="{% url 'editarTarea' pk=progreso.id %}" 
+                                >Editar Tarea
+                              </a>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                {% endfor %}
+              {% endif %}
+            </div> 
+          </div>
+        </div>
+        <div class="card">
+          <div id="heading3"> </div>
+          <div
+            id="collapse3"
+            class="collapse"
+            aria-labelledby="heading3"
+            data-bs-parent="#accordionExample"
+          >
+          <h3>Tareas Terminadas</h3>
+
+            
+          <div class="row justify-content-center" >
+            {% if tareasTerminadas  %}
+              {% for terminada in tareasTerminadas %}
+                <div class="col-lg-4 mb-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4 border-bottom">{{terminada.titulo}} </h5>
+                        <div class="card-text">
+
+                            <!-- no funciona corregir  -->
+                            {% if terminada.fecha_vencimiento < now %}
+                              <p> Tarea Vencida  </p>
+                            {% endif %}
+                            <!-- termian aca  -->
+
+                            <p> Fecha de vencimiento: {{terminada.fecha_vencimiento}} </p>
+
+                            <p> Etiqueta: {{terminada.etiqueta}} </p>
+                            <p> Descripción: {{terminada.descripcion}} </p>
+                            <p> Observación: {{terminada.observacion}} </p>
+                            <p class="{% if terminada.prioridad == 'Baja' %}text-success {% elif terminada.prioridad == 'Media' %}text-danger{% elif terminada.prioridad == 'Alta' %}text-warning{% elif terminada.prioridad == 'Crítica' %}text-danger bg-dark {% endif %}"> Prioridad: {{terminada.prioridad}} </p>
+                            <a
+                                class="btn btn-primary m-1"
+                                role="button"
+                                href="{% url 'verTarea' pk=terminada.id %}">
+                                Ver Tarea
+                              </a>
+                            <form action="{% url 'eliminarTarea' pk=terminada.id %}" method='POST'>
+                              {% csrf_token %}
+                              <button class="btn btn-danger" type="submit">Eliminar Tarea</button>
+                            </form>
+                              <a
+                                class="btn btn-dark m-1"
+                                role="button"
+                                href="{% url 'editarTarea' pk=terminada.id %}" 
+                                >Editar Tarea
+                              </a>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+              {% endfor %}
+            {% endif %}
+          </div> 
+          </div>
+        </div>
+        <div class="card">
+          <div id="heading4"> </div>
+          <div
+            id="collapse4"
+            class="collapse"
+            aria-labelledby="heading4"
+            data-bs-parent="#accordionExample"
+          >
+          <h3>Tareas Canceladas</h3>
+
+            
+          <div class="row justify-content-center" >
+            {% if tareasCanceladas  %}
+              {% for cancelada in tareasCanceladas %}
+                <div class="col-lg-4 mb-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4 border-bottom">{{cancelada.titulo}} </h5>
+                        <div class="card-text">
+
+                            <!-- no funciona corregir  -->
+                            {% if cancelada.fecha_vencimiento < now %}
+                              <p> Tarea Vencida  </p>
+                            {% endif %}
+                            <!-- termian aca  -->
+
+                            <p> Fecha de vencimiento: {{cancelada.fecha_vencimiento}} </p>
+
+                            <p> Etiqueta: {{cancelada.etiqueta}} </p>
+                            <p> Descripción: {{cancelada.descripcion}} </p>
+                            <p> Observación: {{cancelada.observacion}} </p>
+                            <p class="{% if cancelada.prioridad == 'Baja' %}text-success {% elif cancelada.prioridad == 'Media' %}text-danger{% elif cancelada.prioridad == 'Alta' %}text-warning{% elif cancelada.prioridad == 'Crítica' %}text-danger bg-dark {% endif %}"> Prioridad: {{cancelada.prioridad}} </p>
+                            <a
+                                class="btn btn-primary m-1"
+                                role="button"
+                                href="{% url 'verTarea' pk=cancelada.id %}">
+                                Ver Tarea
+                              </a>
+                            <form action="{% url 'eliminarTarea' pk=cancelada.id %}" method='POST'>
+                              {% csrf_token %}
+                              <button class="btn btn-danger" type="submit">Eliminar Tarea</button>
+                            </form>
+                              <a
+                                class="btn btn-dark m-1"
+                                role="button"
+                                href="{% url 'editarTarea' pk=cancelada.id %}" 
+                                >Editar Tarea
+                              </a>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+              {% endfor %}
+            {% endif %}
+          </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  </div>
+  </div>
+
+{% endblock %}
+
+

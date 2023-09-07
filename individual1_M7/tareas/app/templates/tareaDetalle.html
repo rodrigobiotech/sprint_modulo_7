@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+{% block title %}Ver Tarea{% endblock %} 
+{% block content %}
+<div class="container">
+    <h2>Ver Tarea</h2>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+    <h1 class="card-title text-center">{{Tarea.titulo}}</h1>
+    <p class="card-text text-center">Descripción: {{Tarea.descripcion}}</p>
+    <p class="card-text text-center">Fecha de Vencimiento de Tarea: {{Tarea.fecha_vencimiento}}</p>
+    <p class="card-text text-center">Estado: {{Tarea.estado}}</p>
+    <p class="card-text text-center">Etiqueta: {{Tarea.etiqueta}}</p>
+    <p class="card-text text-center">Observación: {{Tarea.observacion}}</p>
+    <p class="card-text text-center">Prioridad:{{Tarea.prioridad}}</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+    <a
+        class="btn btn-primary m-1"
+        role="button"
+        href="{% url 'listaTareas' %}">
+        Volver
+    </a>
+    <form action="{% url 'eliminarTarea' pk=Tarea.id %}" method='POST'>
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Eliminar Tarea</button>
+      </form>
+        <a
+          class="btn btn-dark m-1"
+          role="button"
+          href="{% url 'editarTarea' pk=Tarea.id %}" 
+          >Editar Tarea
+        </a>
+        <a
+          class="btn btn-success m-1"
+          role="button"
+          href="{% url 'completarTarea' pk=Tarea.id %}" 
+          >Completar Tarea
+        </a>
+   
+   
+
+
+
+
+    <!-- <form action="" method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Guardar Cambios</button>
+    </form> -->
+</div>
+
+{% endblock %}
